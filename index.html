@@ -605,6 +605,7 @@
 
   <div class="sidebar-day">
     <div class="sidebar-day-label">Wed 17. juni</div>
+    <div class="sidebar-match"><span class="s-time">19:00</span><span class="s-teams">Portugal · DR Kongo</span></div>
     <div class="sidebar-match"><span class="s-time">22:00</span><span class="s-teams">Ongland · Kroatia</span></div>
   </div>
 
@@ -634,6 +635,7 @@
 
   <div class="sidebar-day">
     <div class="sidebar-day-label">Tue 23. juni</div>
+    <div class="sidebar-match"><span class="s-time">19:00</span><span class="s-teams">Portugal · Uzbekistan</span></div>
     <div class="sidebar-match"><span class="s-time">22:00</span><span class="s-teams">Ongland · Ghana</span></div>
   </div>
 
@@ -657,6 +659,7 @@
 
   <div class="sidebar-day">
     <div class="sidebar-day-label">Sat 27. juni</div>
+    <div class="sidebar-match"><span class="s-time night">01:30</span><span class="s-teams">Colombia · Portugal</span></div>
     <div class="sidebar-match"><span class="s-time night">04:00</span><span class="s-teams">Jordan · Argentina</span></div>
     <div class="sidebar-match"><span class="s-time night">23:00</span><span class="s-teams">Panama · Ongland</span></div>
   </div>
@@ -689,6 +692,7 @@
     <a href="#nor" class="nav-team">🇳🇴 Norra</a>
     <a href="#svo" class="nav-team">🇸🇪 Svøríki</a>
     <a href="#sko" class="nav-team">🏴 Skotland</a>
+    <a href="#por" class="nav-team">🇵🇹 Portugal</a>
   </nav>
 
   <!-- TÝSKLAND -->
@@ -1088,6 +1092,46 @@
     </div>
   </section>
 
+  <!-- PORTUGAL -->
+  <section class="team-section" id="por">
+    <div class="team-header">
+      <span class="team-flag">🇵🇹</span>
+      <h2 class="team-name">Portugal</h2>
+      <span class="team-group">Group K</span>
+    </div>
+    <div class="matches">
+      <div class="match">
+        <div class="match-date"><span>Wed 17. juni</span><span class="match-time">19:00</span></div>
+        <div class="match-teams"><strong>Portugal</strong> <span class="match-vs">vs</span> DR Kongo</div>
+        <div class="match-venue">Houston, USA</div>
+        <div class="match-broadcast">
+          <span class="badge badge-kvf">KVF</span>
+          <span class="badge badge-dr">DR</span>
+          <span class="badge badge-tv2">TV 2 Play</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="match-date"><span>Tue 23. juni</span><span class="match-time">19:00</span></div>
+        <div class="match-teams"><strong>Portugal</strong> <span class="match-vs">vs</span> Uzbekistan</div>
+        <div class="match-venue">Houston, USA</div>
+        <div class="match-broadcast">
+          <span class="badge badge-kvf">KVF</span>
+          <span class="badge badge-dr">DR</span>
+          <span class="badge badge-tv2">TV 2 Play</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="match-date"><span>Sat 27. juni</span><span class="match-time night night-icon">01:30</span></div>
+        <div class="match-teams">Colombia <span class="match-vs">vs</span> <strong>Portugal</strong></div>
+        <div class="match-venue">Miami, USA</div>
+        <div class="match-broadcast">
+          <span class="badge badge-dr">DR</span>
+          <span class="badge badge-tv2">TV 2 Play</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <p>🌙 = nátt-dystir (eftir miðnátt í Føroyum)</p>
     <p>Klokkusettini eru í føroyskum tíma (GMT+1, summartíð)</p>
@@ -1128,6 +1172,7 @@ const matchData = {
     { time: '21:00', home: 'Frakland', away: 'Senegal', night: false },
   ],
   17: [
+    { time: '19:00', home: 'Portugal', away: 'DR Kongo', night: false },
     { time: '22:00', home: 'Ongland', away: 'Kroatia', night: false },
   ],
   19: [
@@ -1147,6 +1192,7 @@ const matchData = {
     { time: '23:00', home: 'Frakland', away: 'Irak', night: true },
   ],
   23: [
+    { time: '19:00', home: 'Portugal', away: 'Uzbekistan', night: false },
     { time: '22:00', home: 'Ongland', away: 'Ghana', night: false },
   ],
   24: [
@@ -1162,6 +1208,7 @@ const matchData = {
     { time: '21:00', home: 'Norra', away: 'Frakland', night: false },
   ],
   27: [
+    { time: '01:30', home: 'Colombia', away: 'Portugal', night: true },
     { time: '04:00', home: 'Jordan', away: 'Argentina', night: true },
     { time: '23:00', home: 'Panama', away: 'Ongland', night: true },
   ],
