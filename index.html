@@ -425,7 +425,140 @@
 
   footer p { margin-bottom: 0.5rem; }
 
+  /* RIGHT SIDEBAR / CALENDAR */
+  .sidebar-right {
+    width: 240px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-alt);
+    border-left: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .cal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+
+  .cal-month {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin-bottom: 1rem;
+  }
+
+  .cal-day-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    text-align: center;
+    color: var(--text-dim);
+    padding: 0.25rem 0;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    border-radius: 4px;
+    color: var(--text-dim);
+    transition: background 0.15s ease;
+  }
+
+  .cal-day.has-match {
+    cursor: pointer;
+    background: rgba(240, 219, 79, 0.08);
+    color: var(--text);
+    border: 1px solid rgba(240, 219, 79, 0.2);
+  }
+
+  .cal-day.has-match:hover { background: rgba(240, 219, 79, 0.18); }
+
+  .cal-day.selected {
+    background: var(--accent) !important;
+    color: var(--bg) !important;
+    font-weight: 700;
+    border-color: var(--accent) !important;
+  }
+
+  .cal-day.today-marker {
+    outline: 2px solid var(--accent-cool);
+    outline-offset: -2px;
+  }
+
+  .cal-matches-panel {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .cal-matches-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.6rem;
+  }
+
+  .cal-match-item {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+    align-items: baseline;
+  }
+
+  .cal-match-item:last-child { border-bottom: none; }
+
+  .cal-match-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 36px;
+    flex-shrink: 0;
+  }
+
+  .cal-match-time.night { color: var(--pink); }
+
+  .cal-match-teams {
+    font-size: 0.8rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .cal-no-match {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 1rem 0;
+  }
+
   /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .sidebar-right { display: none; }
+  }
+
   @media (max-width: 900px) {
     .sidebar { display: none; }
   }
@@ -963,7 +1096,132 @@
 
 </div>
 </div><!-- main-content -->
+
+<aside class="sidebar-right">
+  <div class="cal-title">Vel Dato</div>
+  <div class="cal-month">Juni 2026</div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-matches-panel" id="calMatches">
+    <div class="cal-no-match">Vel ein dag</div>
+  </div>
+</aside>
+
 </div><!-- page-layout -->
+
+<script>
+const matchData = {
+  13: [
+    { time: '00:00', home: 'Brasil', away: 'Marokko', night: true },
+    { time: '03:00', home: 'Haiti', away: 'Skotland', night: true },
+  ],
+  14: [
+    { time: '04:00', home: 'Svøríki', away: 'Tunisia', night: true },
+    { time: '19:00', home: 'Týskland', away: 'Curaçao', night: false },
+    { time: '22:00', home: 'Holland', away: 'Japan', night: false },
+  ],
+  15: [
+    { time: '18:00', home: 'Spania', away: 'Grønhøvdaoyggjar', night: false },
+  ],
+  16: [
+    { time: '00:00', home: 'Irak', away: 'Norra', night: true },
+    { time: '03:00', home: 'Argentina', away: 'Algeria', night: true },
+    { time: '21:00', home: 'Frakland', away: 'Senegal', night: false },
+  ],
+  17: [
+    { time: '22:00', home: 'Ongland', away: 'Kroatia', night: false },
+  ],
+  19: [
+    { time: '00:00', home: 'Skotland', away: 'Marokko', night: true },
+    { time: '02:30', home: 'Brasil', away: 'Haiti', night: true },
+  ],
+  20: [
+    { time: '19:00', home: 'Holland', away: 'Svøríki', night: false },
+    { time: '22:00', home: 'Týskland', away: 'Fílabeinsstrond', night: false },
+  ],
+  21: [
+    { time: '18:00', home: 'Spania', away: 'Saudi-Arabia', night: false },
+  ],
+  22: [
+    { time: '02:00', home: 'Norra', away: 'Senegal', night: true },
+    { time: '19:00', home: 'Argentina', away: 'Eysturríki', night: false },
+    { time: '23:00', home: 'Frakland', away: 'Irak', night: true },
+  ],
+  23: [
+    { time: '22:00', home: 'Ongland', away: 'Ghana', night: false },
+  ],
+  24: [
+    { time: '00:00', home: 'Skotland', away: 'Brasil', night: true },
+  ],
+  25: [
+    { time: '01:00', home: 'Tunisia', away: 'Holland', night: true },
+    { time: '01:00', home: 'Japan', away: 'Svøríki', night: true },
+    { time: '22:00', home: 'Ecuador', away: 'Týskland', night: false },
+  ],
+  26: [
+    { time: '02:00', home: 'Uruguay', away: 'Spania', night: true },
+    { time: '21:00', home: 'Norra', away: 'Frakland', night: false },
+  ],
+  27: [
+    { time: '04:00', home: 'Jordan', away: 'Argentina', night: true },
+    { time: '23:00', home: 'Panama', away: 'Ongland', night: true },
+  ],
+};
+
+const dayNames = ['Má', 'Tý', 'Mi', 'Hó', 'Fr', 'Le', 'Su'];
+const grid = document.getElementById('calGrid');
+const panel = document.getElementById('calMatches');
+
+dayNames.forEach(d => {
+  const el = document.createElement('div');
+  el.className = 'cal-day-name';
+  el.textContent = d;
+  grid.appendChild(el);
+});
+
+// June 1, 2026 is a Monday — offset = 0 for Mon-first grid
+const today = new Date();
+const todayDay = (today.getFullYear() === 2026 && today.getMonth() === 5) ? today.getDate() : null;
+
+for (let day = 1; day <= 30; day++) {
+  const el = document.createElement('div');
+  el.className = 'cal-day';
+  el.textContent = day;
+  el.dataset.day = day;
+  if (matchData[day]) {
+    el.classList.add('has-match');
+    el.addEventListener('click', () => selectDay(day));
+  }
+  if (day === todayDay) el.classList.add('today-marker');
+  grid.appendChild(el);
+}
+
+function selectDay(day) {
+  document.querySelectorAll('.cal-day.selected').forEach(d => d.classList.remove('selected'));
+  const el = grid.querySelector(`[data-day="${day}"]`);
+  if (el) el.classList.add('selected');
+
+  const ms = matchData[day];
+  if (!ms) {
+    panel.innerHTML = '<div class="cal-no-match">Ongar dystirnar</div>';
+    return;
+  }
+  let html = `<div class="cal-matches-date">${day}. juni 2026</div>`;
+  ms.forEach(m => {
+    html += `<div class="cal-match-item">
+      <span class="cal-match-time${m.night ? ' night' : ''}">${m.time}</span>
+      <span class="cal-match-teams">${m.home} · ${m.away}</span>
+    </div>`;
+  });
+  panel.innerHTML = html;
+}
+
+// Auto-select today if it has matches, otherwise first match day
+if (todayDay && matchData[todayDay]) {
+  selectDay(todayDay);
+} else {
+  selectDay(13);
+}
+</script>
 
 </body>
 </html>
