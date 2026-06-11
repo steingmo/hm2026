@@ -416,10 +416,11 @@
   .sidebar-toggle button {
     flex: 1;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    padding: 0.4rem 0.3rem;
+    padding: 0.55rem 0.3rem;
     background: transparent;
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -437,6 +438,67 @@
     background: rgba(240, 219, 79, 0.12);
     border-color: var(--accent);
     color: var(--accent);
+  }
+
+  .toggle-help {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    padding: 0.6rem 0.7rem;
+    background: rgba(240, 219, 79, 0.05);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+  }
+
+  .toggle-help strong { color: var(--accent); font-weight: 600; }
+
+  /* Bigger text when "Øll lið" is shown in the sidebar */
+  #sidebarAll .sidebar-day-label { font-size: 0.75rem; }
+  #sidebarAll .s-time { font-size: 0.85rem; min-width: 46px; }
+  #sidebarAll .s-teams { font-size: 0.9rem; }
+  #sidebarAll .sidebar-note { font-size: 0.75rem; }
+
+  /* ALL MATCHES VIEW (main content) */
+  .all-intro {
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+  }
+
+  .all-intro h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .all-intro p {
+    color: var(--text-dim);
+    font-size: 1rem;
+    max-width: 700px;
+  }
+
+  .all-day { margin-bottom: 3rem; }
+
+  .all-day-label {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    padding-bottom: 0.6rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px dashed var(--border);
+  }
+
+  .badge-ukn {
+    background: rgba(139, 148, 158, 0.12);
+    color: var(--text-dim);
+    border: 1px solid rgba(139, 148, 158, 0.3);
   }
 
   .sidebar-note {
@@ -625,6 +687,11 @@
     <button id="btnAll" type="button">Øll lið</button>
   </div>
 
+  <div class="toggle-help">
+    <strong>Vald lið</strong> = bert dystirnir hjá liðunum á síðuni.<br>
+    <strong>Øll lið</strong> = allir 104 HM-dystirnir — vísast eisini á miðjuni av síðuni við kanalum.
+  </div>
+
   <div id="sidebarCurated">
 
   <div class="sidebar-day">
@@ -751,6 +818,15 @@
     <a href="#sko" class="nav-team">🏴 Skotland</a>
     <a href="#por" class="nav-team">🇵🇹 Portugal</a>
   </nav>
+
+  <!-- ALL MATCHES (shown when "Øll lið" is selected) -->
+  <section id="allMatchesSection" style="display: none;">
+    <div class="all-intro">
+      <h2>⚽ Allir 104 HM-dystirnir</h2>
+      <p>Her sært tú allar dystirnar á HM 2026 — dag fyri dag, við klokkasetti í føroyskari tíð og kanalinum, har dysturin verður sýndur beinleiðis. Trýst á <strong>Vald lið</strong> í vinstru síðuni fyri at síggja bert liðini á síðuni aftur.</p>
+    </div>
+    <div id="allMatchesList"></div>
+  </section>
 
   <!-- TÝSKLAND -->
   <section class="team-section" id="tysk">
@@ -1251,31 +1327,31 @@ const allDays = [
   { label: 'Sat 13. juni', cal: 13, matches: [
     { time: '02:00', text: 'USA · Paraguay', night: true },
     { time: '20:00', text: 'Katar · Sveis', night: false },
-    { time: '23:00', text: 'Brasil · Marokko', night: false },
+    { time: '23:00', text: 'Brasil · Marokko', night: false, tv: ['kvf', 'tv2'] },
   ]},
   { label: 'Sun 14. juni', cal: 14, matches: [
-    { time: '02:00', text: 'Haiti · Skotland', night: true },
+    { time: '02:00', text: 'Haiti · Skotland', night: true, tv: ['dr'] },
     { time: '05:00', text: 'Avstralia · Turkaland', night: true },
-    { time: '18:00', text: 'Týskland · Curaçao', night: false },
-    { time: '21:00', text: 'Holland · Japan', night: false },
+    { time: '18:00', text: 'Týskland · Curaçao', night: false, tv: ['kvf', 'dr'] },
+    { time: '21:00', text: 'Holland · Japan', night: false, tv: ['kvf', 'tv2'] },
   ]},
   { label: 'Mon 15. juni', cal: 15, matches: [
     { time: '00:00', text: 'Fílabeinsstrond · Ecuador', night: true },
-    { time: '03:00', text: 'Svøríki · Tunisia', night: true },
-    { time: '17:00', text: 'Spania · Grønhøvdaoyggjar', night: false },
+    { time: '03:00', text: 'Svøríki · Tunisia', night: true, tv: ['dr'] },
+    { time: '17:00', text: 'Spania · Grønhøvdaoyggjar', night: false, tv: ['tv2'] },
     { time: '20:00', text: 'Belgia · Egyptaland', night: false },
     { time: '23:00', text: 'Saudi-Arabia · Uruguay', night: false },
   ]},
   { label: 'Tue 16. juni', cal: 16, matches: [
     { time: '02:00', text: 'Iran · Nýsæland', night: true },
-    { time: '20:00', text: 'Frakland · Senegal', night: false },
-    { time: '23:00', text: 'Irak · Norra', night: false },
+    { time: '20:00', text: 'Frakland · Senegal', night: false, tv: ['kvf', 'dr'] },
+    { time: '23:00', text: 'Irak · Norra', night: false, tv: ['kvf', 'tv2'] },
   ]},
   { label: 'Wed 17. juni', cal: 17, matches: [
-    { time: '02:00', text: 'Argentina · Algeria', night: true },
+    { time: '02:00', text: 'Argentina · Algeria', night: true, tv: ['tv2'] },
     { time: '05:00', text: 'Eysturríki · Jordan', night: true },
-    { time: '18:00', text: 'Portugal · DR Kongo', night: false },
-    { time: '21:00', text: 'Ongland · Kroatia', night: false },
+    { time: '18:00', text: 'Portugal · DR Kongo', night: false, tv: ['kvf', 'tv2'] },
+    { time: '21:00', text: 'Ongland · Kroatia', night: false, tv: ['kvf', 'tv2'] },
   ]},
   { label: 'Thu 18. juni', cal: 18, matches: [
     { time: '00:00', text: 'Ghana · Panama', night: true },
@@ -1287,31 +1363,31 @@ const allDays = [
   { label: 'Fri 19. juni', cal: 19, matches: [
     { time: '02:00', text: 'Mexiko · Suðurkorea', night: true },
     { time: '20:00', text: 'USA · Avstralia', night: false },
-    { time: '23:00', text: 'Skotland · Marokko', night: false },
+    { time: '23:00', text: 'Skotland · Marokko', night: false, tv: ['kvf', 'dr'] },
   ]},
   { label: 'Sat 20. juni', cal: 20, matches: [
-    { time: '01:30', text: 'Brasil · Haiti', night: true },
+    { time: '01:30', text: 'Brasil · Haiti', night: true, tv: ['dr'] },
     { time: '04:00', text: 'Turkaland · Paraguay', night: true },
-    { time: '18:00', text: 'Holland · Svøríki', night: false },
-    { time: '21:00', text: 'Týskland · Fílabeinsstrond', night: false },
+    { time: '18:00', text: 'Holland · Svøríki', night: false, tv: ['kvf', 'dr'] },
+    { time: '21:00', text: 'Týskland · Fílabeinsstrond', night: false, tv: ['kvf', 'dr'] },
   ]},
   { label: 'Sun 21. juni', cal: 21, matches: [
     { time: '01:00', text: 'Ecuador · Curaçao', night: true },
     { time: '05:00', text: 'Tunisia · Japan', night: true },
-    { time: '17:00', text: 'Spania · Saudi-Arabia', night: false },
+    { time: '17:00', text: 'Spania · Saudi-Arabia', night: false, tv: ['kvf', 'tv2'] },
     { time: '20:00', text: 'Belgia · Iran', night: false },
     { time: '23:00', text: 'Uruguay · Grønhøvdaoyggjar', night: false },
   ]},
   { label: 'Mon 22. juni', cal: 22, matches: [
     { time: '02:00', text: 'Nýsæland · Egyptaland', night: true },
-    { time: '18:00', text: 'Argentina · Eysturríki', night: false },
-    { time: '22:00', text: 'Frakland · Irak', night: false },
+    { time: '18:00', text: 'Argentina · Eysturríki', night: false, tv: ['kvf', 'tv2'] },
+    { time: '22:00', text: 'Frakland · Irak', night: false, tv: ['dr'] },
   ]},
   { label: 'Tue 23. juni', cal: 23, matches: [
-    { time: '01:00', text: 'Norra · Senegal', night: true },
+    { time: '01:00', text: 'Norra · Senegal', night: true, tv: ['tv2'] },
     { time: '04:00', text: 'Jordan · Algeria', night: true },
-    { time: '18:00', text: 'Portugal · Uzbekistan', night: false },
-    { time: '21:00', text: 'Ongland · Ghana', night: false },
+    { time: '18:00', text: 'Portugal · Uzbekistan', night: false, tv: ['kvf', 'dr'] },
+    { time: '21:00', text: 'Ongland · Ghana', night: false, tv: ['tv2'] },
   ]},
   { label: 'Wed 24. juni', cal: 24, matches: [
     { time: '00:00', text: 'Panama · Kroatia', night: true },
@@ -1319,35 +1395,35 @@ const allDays = [
     { time: '20:00', text: 'Sveis · Kanada', night: false },
     { time: '20:00', text: 'Bosnia-Hersegovina · Katar', night: false },
     { time: '23:00', text: 'Marokko · Haiti', night: false },
-    { time: '23:00', text: 'Skotland · Brasil', night: false },
+    { time: '23:00', text: 'Skotland · Brasil', night: false, tv: ['kvf', 'dr'] },
   ]},
   { label: 'Thu 25. juni', cal: 25, matches: [
     { time: '02:00', text: 'Suðurafrika · Suðurkorea', night: true },
     { time: '02:00', text: 'Kekkia · Mexiko', night: true },
     { time: '21:00', text: 'Curaçao · Fílabeinsstrond', night: false },
-    { time: '21:00', text: 'Ecuador · Týskland', night: false },
+    { time: '21:00', text: 'Ecuador · Týskland', night: false, tv: ['tv2'] },
   ]},
   { label: 'Fri 26. juni', cal: 26, matches: [
-    { time: '00:00', text: 'Tunisia · Holland', night: true },
-    { time: '00:00', text: 'Japan · Svøríki', night: true },
+    { time: '00:00', text: 'Tunisia · Holland', night: true, tv: ['dr'] },
+    { time: '00:00', text: 'Japan · Svøríki', night: true, tv: ['dr'] },
     { time: '03:00', text: 'Turkaland · USA', night: true },
     { time: '03:00', text: 'Paraguay · Avstralia', night: true },
-    { time: '20:00', text: 'Norra · Frakland', night: false },
+    { time: '20:00', text: 'Norra · Frakland', night: false, tv: ['kvf', 'dr'] },
     { time: '20:00', text: 'Senegal · Irak', night: false },
   ]},
   { label: 'Sat 27. juni', cal: 27, matches: [
     { time: '01:00', text: 'Grønhøvdaoyggjar · Saudi-Arabia', night: true },
-    { time: '01:00', text: 'Uruguay · Spania', night: true },
+    { time: '01:00', text: 'Uruguay · Spania', night: true, tv: ['tv2'] },
     { time: '04:00', text: 'Nýsæland · Belgia', night: true },
     { time: '04:00', text: 'Egyptaland · Iran', night: true },
-    { time: '22:00', text: 'Panama · Ongland', night: false },
+    { time: '22:00', text: 'Panama · Ongland', night: false, tv: ['tv2'] },
     { time: '22:00', text: 'Kroatia · Ghana', night: false },
   ]},
   { label: 'Sun 28. juni', cal: 28, matches: [
-    { time: '00:30', text: 'Colombia · Portugal', night: true },
+    { time: '00:30', text: 'Colombia · Portugal', night: true, tv: ['tv2'] },
     { time: '00:30', text: 'DR Kongo · Uzbekistan', night: true },
     { time: '03:00', text: 'Algeria · Eysturríki', night: true },
-    { time: '03:00', text: 'Jordan · Argentina', night: true },
+    { time: '03:00', text: 'Jordan · Argentina', night: true, tv: ['dr'] },
     { time: '20:00', text: '1/16: 2A – 2B', night: false },
   ]},
   { label: 'Mon 29. juni', cal: 29, matches: [
@@ -1427,6 +1503,30 @@ document.getElementById('sidebarAll').innerHTML = allDays.map(d => `
   </div>`).join('') +
   '<div class="sidebar-note">1A = nr. 1 í bólki A · 3.pl = eitt av bestu nr. 3-liðunum · 1/16 = sekstandapartsfinala</div>';
 
+const tvBadgeHtml = {
+  kvf: '<span class="badge badge-kvf">KVF</span>',
+  dr: '<span class="badge badge-dr">DR</span>',
+  tv2: '<span class="badge badge-tv2">TV 2 Play</span>',
+};
+
+function broadcastHtml(m) {
+  if (m.tv) return m.tv.map(c => tvBadgeHtml[c]).join('');
+  return '<span class="badge badge-ukn">DR / TV 2 Play</span>';
+}
+
+document.getElementById('allMatchesList').innerHTML = allDays.map(d => `
+  <div class="all-day">
+    <h3 class="all-day-label">${d.label}</h3>
+    <div class="matches">
+      ${d.matches.map(m => `
+      <div class="match">
+        <div class="match-date"><span>${d.label}</span><span class="match-time${m.night ? ' night night-icon' : ''}">${m.time}</span></div>
+        <div class="match-teams">${m.text}</div>
+        <div class="match-broadcast">${broadcastHtml(m)}</div>
+      </div>`).join('')}
+    </div>
+  </div>`).join('');
+
 const dayNames = ['Má', 'Tý', 'Mi', 'Hó', 'Fr', 'Le', 'Su'];
 const grid = document.getElementById('calGrid');
 const panel = document.getElementById('calMatches');
@@ -1492,6 +1592,10 @@ function setMode(m) {
   document.getElementById('btnAll').classList.toggle('active', m === 'all');
   document.getElementById('sidebarCurated').style.display = m === 'mine' ? '' : 'none';
   document.getElementById('sidebarAll').style.display = m === 'all' ? '' : 'none';
+  document.getElementById('allMatchesSection').style.display = m === 'all' ? '' : 'none';
+  document.querySelector('.nav-teams').style.display = m === 'all' ? 'none' : '';
+  document.querySelectorAll('.team-section').forEach(s => { s.style.display = m === 'all' ? 'none' : ''; });
+  if (m === 'all') window.scrollTo({ top: 0 });
   refreshCal();
   const sel = document.querySelector('.cal-day.selected');
   if (sel) selectDay(+sel.dataset.day);
