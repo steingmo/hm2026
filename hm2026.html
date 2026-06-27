@@ -1699,6 +1699,9 @@ if (todayDay && matchData[todayDay]) {
   selectDay(13);
 }
 
+// Default to the "Øll lið" (all matches) view on open
+setMode('all');
+
 // Scroll the page to today's matches (or the next upcoming day) on open
 let userScrolled = false;
 ['wheel', 'touchmove', 'keydown'].forEach(ev =>
