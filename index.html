@@ -454,6 +454,25 @@
 
   .toggle-help strong { color: var(--accent); font-weight: 600; }
 
+  /* "Show past matches" toggle */
+  .past-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 1.25rem;
+  }
+  .past-toggle input { accent-color: var(--accent); cursor: pointer; margin: 0; }
+
+  /* Hide finished (past) days in the chronological timeline unless toggled on */
+  body:not(.show-past) .is-past { display: none; }
+  body:not(.show-past) .cal-day.cal-past { opacity: 0.28; cursor: default; }
+  body:not(.show-past) .cal-day.cal-past:hover { background: transparent; }
+
   /* Bigger text when "Øll lið" is shown in the sidebar */
   #sidebarAll .sidebar-day-label { font-size: 0.75rem; }
   #sidebarAll .s-time { font-size: 0.85rem; min-width: 46px; }
@@ -716,6 +735,10 @@
     <strong>Vald lið</strong> = bert dystirnir hjá liðunum á síðuni.<br>
     <strong>Øll lið</strong> = allir 104 HM-dystirnir — vísast eisini á miðjuni av síðuni við kanalum.
   </div>
+
+  <label class="past-toggle">
+    <input type="checkbox" id="togglePast"> Vís farnar dystir
+  </label>
 
   <div id="sidebarCurated">
 
@@ -1526,11 +1549,27 @@ const allDays = [
   ]},
 ];
 
+// --- Date helpers (today + past-match detection) ---
+const monthIndex = { januar: 0, februar: 1, mars: 2, 'apríl': 3, mai: 4, juni: 5, juli: 6, august: 7, september: 8, oktober: 9, november: 10, desember: 11 };
+function parseMatchDate(label) {
+  const m = label.match(/(\d{1,2})\.\s*(\S+)/);
+  if (!m) return null;
+  const mo = monthIndex[m[2].toLowerCase()];
+  if (mo === undefined) return null;
+  return new Date(2026, mo, +m[1]);
+}
+const nowDate = new Date();
+const todayMid = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate());
+function isPastLabel(label) {
+  const d = parseMatchDate(label);
+  return d !== null && d < todayMid;
+}
+
 const allMatchDataJune = {};
 allDays.forEach(d => { if (d.cal) allMatchDataJune[d.cal] = d.matches; });
 
 document.getElementById('sidebarAll').innerHTML = allDays.map(d => `
-  <div class="sidebar-day">
+  <div class="sidebar-day${isPastLabel(d.label) ? ' is-past' : ''}">
     <div class="sidebar-day-label">${d.label}</div>
     ${d.matches.map(m => `<div class="sidebar-match"><span class="s-time${m.night ? ' night' : ''}">${m.time}</span><span class="s-teams">${m.text}</span></div>`).join('')}
   </div>`).join('') +
@@ -1548,7 +1587,7 @@ function broadcastHtml(m) {
 }
 
 document.getElementById('allMatchesList').innerHTML = allDays.map(d => `
-  <div class="all-day">
+  <div class="all-day${isPastLabel(d.label) ? ' is-past' : ''}">
     <h3 class="all-day-label">${d.label}</h3>
     <div class="matches">
       ${d.matches.map(m => `
@@ -1586,10 +1625,26 @@ for (let day = 1; day <= 30; day++) {
   el.className = 'cal-day';
   el.textContent = day;
   el.dataset.day = day;
-  el.addEventListener('click', () => { if (activeData()[day]) selectDay(day); });
+  if (new Date(2026, 5, day) < todayMid) el.classList.add('cal-past');
+  el.addEventListener('click', () => {
+    if (el.classList.contains('cal-past') && !document.body.classList.contains('show-past')) return;
+    if (activeData()[day]) selectDay(day);
+  });
   if (day === todayDay) el.classList.add('today-marker');
   grid.appendChild(el);
 }
+
+// Curated sidebar is hardcoded — mark its past day blocks so the toggle can hide them
+document.querySelectorAll('#sidebarCurated .sidebar-day').forEach(el => {
+  const lbl = el.querySelector('.sidebar-day-label');
+  if (lbl && isPastLabel(lbl.textContent)) el.classList.add('is-past');
+});
+
+// "Vís farnar dystir" toggle — show/hide finished days across the timeline
+const togglePast = document.getElementById('togglePast');
+togglePast.addEventListener('change', () => {
+  document.body.classList.toggle('show-past', togglePast.checked);
+});
 
 function refreshCal() {
   const data = activeData();
@@ -1645,27 +1700,17 @@ if (todayDay && matchData[todayDay]) {
 }
 
 // Scroll the page to today's matches (or the next upcoming day) on open
-const monthIndex = { januar: 0, februar: 1, mars: 2, 'apríl': 3, mai: 4, juni: 5, juli: 6, august: 7, september: 8, oktober: 9, november: 10, desember: 11 };
-function parseMatchDate(label) {
-  const m = label.match(/(\d{1,2})\.\s*(\S+)/);
-  if (!m) return null;
-  const mo = monthIndex[m[2].toLowerCase()];
-  if (mo === undefined) return null;
-  return new Date(2026, mo, +m[1]);
-}
 let userScrolled = false;
 ['wheel', 'touchmove', 'keydown'].forEach(ev =>
   window.addEventListener(ev, () => { userScrolled = true; }, { passive: true, once: true }));
 function scrollToToday() {
   if (userScrolled) return;
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   let best = null, bestTime = Infinity;
   document.querySelectorAll('.main-content .match').forEach(card => {
     if (card.offsetParent === null) return; // skip cards hidden in the other mode
     const lbl = card.querySelector('.match-date span');
     const d = lbl && parseMatchDate(lbl.textContent);
-    if (!d || d < today) return;
+    if (!d || d < todayMid) return;
     if (d.getTime() < bestTime) { bestTime = d.getTime(); best = card; }
   });
   if (best) best.scrollIntoView({ block: 'start' });
