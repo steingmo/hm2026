@@ -1558,32 +1558,32 @@ const allDays = [
   ]},
   { label: 'Sat 4. juli', matches: [
     { time: '02:30', text: '1/16: Colombia · Ghana', night: true, tv: ['tv2'], en: 'itv' },
-    { time: '18:00', text: '1/8-finala', night: false },
-    { time: '22:00', text: '1/8-finala', night: false },
+    { time: '18:00', text: '1/8: Kanada · Marokko', night: false, tv: ['tv2'], en: 'itv' },
+    { time: '22:00', text: '1/8: Paraguay · Frakland', night: false, tv: ['kvf', 'dr'], en: 'bbc' },
   ]},
   { label: 'Sun 5. juli', matches: [
-    { time: '21:00', text: '1/8-finala', night: false },
+    { time: '21:00', text: '1/8: Brasil · Norra', night: false, tv: ['kvf', 'tv2'], en: 'itv' },
   ]},
   { label: 'Mon 6. juli', matches: [
-    { time: '01:00', text: '1/8-finala', night: true },
-    { time: '20:00', text: '1/8-finala', night: false },
+    { time: '01:00', text: '1/8: Mexiko · Ongland', night: true, tv: ['kvf', 'dr'], en: 'bbc' },
+    { time: '20:00', text: '1/8: Portugal · Spania', night: false, tv: ['kvf', 'dr'], en: 'bbc' },
   ]},
   { label: 'Tue 7. juli', matches: [
-    { time: '01:00', text: '1/8-finala', night: true },
-    { time: '17:00', text: '1/8-finala', night: false },
-    { time: '21:00', text: '1/8-finala', night: false },
+    { time: '01:00', text: '1/8: USA · Belgia', night: true, tv: ['tv2'], en: 'bbc' },
+    { time: '17:00', text: '1/8: Argentina · Egyptaland', night: false, tv: ['tv2'], en: 'itv' },
+    { time: '21:00', text: '1/8: Sveis · Colombia', night: false, tv: ['kvf', 'dr'], en: 'itv' },
   ]},
   { label: 'Thu 9. juli', matches: [
-    { time: '21:00', text: 'Fjórðingsfinala', night: false },
+    { time: '21:00', text: '1/4: Frakland · Marokko', night: false, tv: ['kvf', 'tv2'] },
   ]},
   { label: 'Fri 10. juli', matches: [
-    { time: '20:00', text: 'Fjórðingsfinala', night: false },
+    { time: '20:00', text: 'Fjórðingsfinala', night: false, tv: ['kvf', 'dr'] },
   ]},
   { label: 'Sat 11. juli', matches: [
-    { time: '22:00', text: 'Fjórðingsfinala', night: false },
+    { time: '21:00', text: 'Fjórðingsfinala', night: false, tv: ['kvf', 'tv2'] },
   ]},
   { label: 'Sun 12. juli', matches: [
-    { time: '02:00', text: 'Fjórðingsfinala', night: true },
+    { time: '02:00', text: 'Fjórðingsfinala', night: true, tv: ['dr'] },
   ]},
   { label: 'Tue 14. juli', matches: [
     { time: '20:00', text: 'Hálvfinala', night: false },
@@ -1623,7 +1623,7 @@ document.getElementById('sidebarAll').innerHTML = allDays.map(d => `
     <div class="sidebar-day-label">${d.label}</div>
     ${d.matches.map(m => `<div class="sidebar-match"><span class="s-time${m.night ? ' night' : ''}">${m.time}</span><span class="s-teams">${m.text}</span></div>`).join('')}
   </div>`).join('') +
-  '<div class="sidebar-note">1A = nr. 1 í bólki A · 3.pl = eitt av bestu nr. 3-liðunum · 1/16 = sekstandapartsfinala</div>';
+  '<div class="sidebar-note">1A = nr. 1 í bólki A · 3.pl = eitt av bestu nr. 3-liðunum · 1/16 = sekstandapartsfinala · 1/8 = áttandapartsfinala · 1/4 = fjórðingsfinala</div>';
 
 const tvBadgeHtml = {
   kvf: '<span class="badge badge-kvf">KVF</span>',
