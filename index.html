@@ -1592,10 +1592,10 @@ const allDays = [
     { time: '20:00', text: '1/2: Ongland · Argentina', night: false, tv: ['kvf', 'tv2'], en: 'bbc' },
   ]},
   { label: 'Sat 18. juli', matches: [
-    { time: '22:00', text: 'Bronsudystur', night: false, tv: ['kvf', 'tv2'] },
+    { time: '22:00', text: 'Bronsudystur: Frakland · Ongland', night: false, tv: ['kvf', 'dr'], en: 'bbc' },
   ]},
   { label: 'Sun 19. juli', matches: [
-    { time: '20:00', text: 'FINALA', night: false, tv: ['kvf', 'dr', 'tv2'] },
+    { time: '20:00', text: 'FINALA: Spania · Argentina', night: false, tv: ['kvf', 'dr', 'tv2'], en: ['bbc', 'itv'] },
   ]},
 ];
 
@@ -1635,7 +1635,7 @@ const tvBadgeHtml = {
 
 function broadcastHtml(m) {
   const fo = m.tv ? m.tv.map(c => tvBadgeHtml[c]).join('') : '<span class="badge badge-ukn">DR ella TV 2 Play</span>';
-  return fo + (m.en ? tvBadgeHtml[m.en] : '');
+  return fo + (m.en ? [].concat(m.en).map(c => tvBadgeHtml[c]).join('') : '');
 }
 
 document.getElementById('allMatchesList').innerHTML = allDays.map(d => `
